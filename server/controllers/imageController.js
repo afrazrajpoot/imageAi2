@@ -1,14 +1,13 @@
 const CoustomError = require("../utils/errorClass");
 const { uploadOnCloudinary } = require("../uploads/cloudinary");
-
 const imageSchema = require("../models/imageModel");
 const fs = require("fs");
 const axios = require("axios");
-
 const { promisify } = require("util");
 const { Buffer } = require("buffer");
-// const pipelineAsync = promisify(pipeline);
 const { resolve } = require("path");
+
+
 //this function is used to convert base364Data into image url
 async function saveImageFromBase64(base64Data, outputPath) {
   try {
@@ -42,7 +41,6 @@ exports.removeBackground = async (req, res, next) => {
       {
         headers: {
           "Content-Type": "application/json",
-          // 'X-Pebblely-Access-Token': 'c52aeca9-70b8-4eb6-9789-a2b681d2ebb5',
           "X-Pebblely-Access-Token": "451c93e1-bd6b-4b90-9375-37fd46501959",
         },
       }
@@ -66,6 +64,9 @@ exports.removeBackground = async (req, res, next) => {
 };
 exports.createImage = async (req, res, next) => {
   try {
+    const { description } = req.body;
+    console.log(description, "description");
+    console.log(req.file, "in try block");
     // Get image path from request (assuming you're using file upload middleware)
     const imagePath = req.file?.path;
     
@@ -97,6 +98,7 @@ exports.createImage = async (req, res, next) => {
       {
         images: [base64Image],
         theme: "Surprise me",
+        description: description,
         transforms: [
           {
             scale_x: 1,
@@ -106,6 +108,9 @@ exports.createImage = async (req, res, next) => {
             angle: 0,
           },
         ],
+        autoresize: true,
+        height:1024,
+        width:1024
       },
       {
         headers: {

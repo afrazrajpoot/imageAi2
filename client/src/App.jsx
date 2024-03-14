@@ -1,16 +1,32 @@
 import React, { useEffect,useState } from 'react';
+import { ChromePicker } from 'react-color';
+import { Icon } from '@iconify/react';
+
+
 
 const App = () => {
   const [image, setImage] = useState(null);
+  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 const [images,setImages] = useState([])
 const [state,setState] =useState(false)
-  function handleFile(e) {
-    console.log(e.target.files[0]);
-    setImage(e.target.files[0]);
-  }
+const [color, setColor] = useState('#ffffff'); // Initial color state
+
+// Handle color change
+const handleColorChange = (newColor) => {
+  setColor(newColor.hex); // Update color state
+};
+const handleIconClick = () => {
+  // Programmatically trigger file input click
+  document.getElementById('imageInput').click();
+};
+
+const handleFile = (e) => {
+  console.log(e.target.files[0]);
+  setImage(e.target.files[0]);
+};
 
   async function callApi(formData) {
     try {
@@ -39,6 +55,7 @@ const [state,setState] =useState(false)
     e.preventDefault();
     const formData = new FormData();
     formData.append('imageUrl', image);
+    formData.append('description', description);
     await callApi(formData);
   }
 useEffect(()=>{
@@ -51,30 +68,39 @@ useEffect(()=>{
   getImages()
 },[state])
   return (
-    <div className="container mx-auto mt-10 flex flex-col items-center">
-      <div className="bg-red-500 p-8 rounded-md">
-        <form onSubmit={uploadFile} className="flex flex-col items-center">
-          <label htmlFor="fileInput" className="text-white font-bold mb-4">Choose an image:</label>
-          <input type="file" onChange={handleFile} name="imageUrl" id="fileInput" className="border-none bg-gray-200 py-2 px-4 rounded-md mb-4" />
-          <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded-md transition duration-300 hover:bg-green-600">Upload</button>
+    <main className="container p-[2vw] flex items-center justify-center">
+      <section className="w-full">
+      <h1 className='text-[2vw] italic font-semibold text-start underline'>Image Uploader</h1>
+        <form onSubmit={uploadFile} className='w-full border-[1px] max-w-[80vw] flex justify-center items-center h-[80vh]'>
+          <main className='w-full relative h-full p-[2vw]'>
+            <footer className='absolute bottom-0 w-full p-[1vw]'>
+              <div className="flex items-center w-full max-w-[70vw] bg-[#f5f5f5] p-[1vw] rounded-md">
+              <div className="cursor-pointer bg-[#f5f5f5] p-[0.5vw]" onClick={handleIconClick}>
+                  <input
+                    type="file"
+                    id="imageInput"
+                    style={{ display: 'none' }}
+                    name="image"
+                    accept="image/*"
+                    onChange={handleFile}
+                  />
+                  <Icon icon='solar:gallery-send-broken' className="text-[1.5vw] text-purple-500 mr-[2vw]" />
+                </div>
+                <input type="text" value={description} onChange={(e)=> setDescription(e.target.value)} name="description" placeholder='enter your prompt to generate the image' id="description" className="w-full focus:outline-none border-purple-500 max-w-[60vw] bg-white p-[1vw] rounded-md border-[1px]" />
+                <button onClick={uploadFile} className='p-[1vw] w-fit text-purple-500 hover:text-purple-700 text-center border-[1px] rounded-md ml-[2vw] bg-[#f5f5f5]'><Icon className='text-[1.5vw]'  icon="formkit:submit" /></button>
+              </div>
+            </footer>
+          </main>
         </form>
-      </div>
-      {loading && <div className="mt-4">Loading...</div>}
-      {error && <div className="text-red-500 mt-4">Error: {error}</div>} 
-      {success && <div className="text-green-500 mt-4">Successfully uploaded</div>}
-      <div className='grid grid-cols-3 place-content-center place-items-center mt-[3vw] '>
-
-      {
-        images?.map((image)=>{
-          return (
-            <div key={image._id} className=' p-[2vw] w-full max-w-[25vw] '>
-            <img   src={image.imageUrl} alt="image" className='w-full rounded-md shadow-md transform hover:scale-110 transition duration-300 ease-in-out'/> 
-          </div>
-         )
-        })
-      }
-      </div>
-    </div>
+      </section>
+     <section className='w-full ml-[2vw] flex flex-col items-center max-w-[15vw]'>
+      <h1 className='text-[1.5vw] italic font-semibold text-start underline'>Color Picker</h1>
+     <ChromePicker color={color} onChange={handleColorChange} />
+     <div className='p-[0.7vw] w-full border-[1px] mt-[1vw] shadow-md rounded-md'>
+     <p className='text-[1vw] w-full font-medium '>Selected Color: {color}</p>
+     </div>
+     </section>
+    </main>
   );
 };
 

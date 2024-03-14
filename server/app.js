@@ -3,7 +3,7 @@ const app = express();
 
 const errorMiddleware = require("./middeleware/errorMideleware.js");
 const cors = require("cors");
-const imageRoutes = require("./routes/createImg.js");
+const imageRoutes = require("./routes/ImageRoute.js");
 
 app.use(express.json());
 app.use(cors());
