@@ -64,7 +64,7 @@ exports.removeBackground = async (req, res, next) => {
 };
 exports.createImage = async (req, res, next) => {
   try {
-    const { description } = req.body;
+    const { description, style_color } = req.body;
     console.log(description, "description");
     console.log(req.file, "in try block");
     // Get image path from request (assuming you're using file upload middleware)
@@ -99,6 +99,7 @@ exports.createImage = async (req, res, next) => {
         images: [base64Image],
         theme: "Surprise me",
         description: description,
+        style_color: style_color ? style_color : "None",
         transforms: [
           {
             scale_x: 1,
