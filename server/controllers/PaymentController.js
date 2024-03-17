@@ -13,7 +13,7 @@ const instance = new razorpay({
 
 
 // checkout api
-app.post("/checkout",async(req,res)=>{
+const paymentCheckout = async (req, res) => {
 
     const options ={
         amount:Number(req.body.amount*100),
@@ -25,10 +25,10 @@ app.post("/checkout",async(req,res)=>{
         success:true,order
     })
 
-})
+}
 
 // payemnt verification
-app.post("/paymentverification",async(req,res)=>{
+const paymentVerification = async (req, res) => {
    const {razorpay_order_id,razorpay_payment_id,razorpay_signature}=req.body;
    const body = razorpay_order_id + "|" +razorpay_payment_id;
    const expectedsgnature =crypto.createHmac('sha256',process.env.SECRET).update(body.toString()).digest('hex')
@@ -42,8 +42,15 @@ app.post("/paymentverification",async(req,res)=>{
    else{
     res.status(400).json({success:false});
    }
-})
+}
 
-app.get("/api/getkey",(req,res)=>{
+const getKey = async (req, res) => {
     return res.status(200).json({key:process.env.KEY})
-})
+}
+
+
+module.exports = {
+    paymentCheckout,
+    paymentVerification,
+    getKey
+}

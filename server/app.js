@@ -4,6 +4,7 @@ const app = express();
 const errorMiddleware = require("./middeleware/errorMideleware.js");
 const cors = require("cors");
 const imageRoutes = require("./routes/ImageRoute.js");
+const paymentRoutes = require("./routes/paymentRoute.js");
 
 app.use(express.json());
 app.use(cors());
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1", imageRoutes);
+app.use("/", paymentRoutes);
 
 app.all("*", (req, res, next) => {
   const error = new Error(`URL ${req.url} not found`);

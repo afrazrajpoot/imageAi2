@@ -14,14 +14,14 @@ const Home = () => {
       key,
       amount:order.amount,
       currency:"INR",
-      name:"Sinmplyjs",
+      name:"",
       description:"Razorpay tutorial",
-      image:"https://avatars.githubusercontent.com/u/96648429?s=96&v=4",
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoHAKWHhA6UuX-UPdizhi5K4IsByBpEJMX8Q&usqp=CAU',
       order_id:order.id,
-      callback_url:"http://localhost:8000/paymentverification",
+      // callback_url:"http://localhost:8000/paymentverification",
       prefill:{
-        name:"Sagar gupta",
-        email:"anandguptasir@gmail.com",
+        name:"Pebbly",
+        email:"",
         contact:"1234567890"
       },
       notes:{
